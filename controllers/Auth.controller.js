@@ -16,12 +16,7 @@ export const register = async (req, res, next) => {
          email,
          password: hashedPassword,
       });
-      const savedUser = await newUser.save();
-      const token = jwt.sign(
-         { userId: savedUser._id },
-         process.env.JWT_SECRET
-      );
-      res.cookie("jwt", token, { httpOnly: true, secure: true});
+      await newUser.save();
       res.status(201).json({ message: "User created successfully" });
    } catch (err) {
       next(err);
@@ -42,12 +37,11 @@ export const login = async (req, res, next) => {
          return next(createError(400, 'Wrong email or password'));
       }
       const token = jwt.sign(
-         { userId: user._id },
+         { id: user._id },
          process.env.JWT_SECRET
       );
-      res.cookie('jwt', token, {
-         httpOnly: true,
-         secure: true
+      res.cookie('access_token', token, {
+         httpOnly: true
       });
       res.status(200).json({
          message: 'Login successful',

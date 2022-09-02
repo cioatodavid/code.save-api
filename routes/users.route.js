@@ -3,7 +3,7 @@ import { verifyToken } from '../utils/verifyToken.js';
 const router = express.Router();
 import {getUserById, updateUser, deleteUser, followUser, unfollowUser, getTimelineSnippets, getUserSnippets} from '../controllers/User.controller.js';
 
-router.get('/:id', verifyToken, getUserById);
+router.get('/:id', getUserById);
 router.put('/:id', verifyToken, updateUser);
 router.delete('/:id', verifyToken, deleteUser);
 router.put('/:id/follow', verifyToken, followUser);

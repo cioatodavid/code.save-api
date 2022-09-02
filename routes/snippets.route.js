@@ -1,101 +1,17 @@
 import express from 'express';
 const router = express.Router();
-import Snippet from '../models/Snippet.model.js';
 
-/* 
-//create a snippet
-router.post('/', async (req, res) => {
-   const newSnippet = new Snippet(req.body);
-   try {
-      const savedSnippet = await newSnippet.save();
-      res.status(200).json(savedSnippet);
-   } catch (err) {
-      res.status(500).json(err);
-   }
-});
+import { verifyToken } from '../utils/verifyToken.js';
 
-//update a snippet
-router.put('/:id', async (req, res) => {
-   try {
-      const snippet = await Snippet.findById(req.params.id);
-      if (snippet.userId === req.body.userId) {
-         await snippet.updateOne({ $set: req.body });
-         res.status(200).json({
-            message: 'The snippet has been updated'
-         });
-      } else {
-         res.status(403).json({
-            message: 'You can update only your snippet'
-         });
-      }
-   } catch (err) {
-      res.status(500).json(err);
-   }
-});
+import { createSnippet, updateSnippet, deleteSnippet, getSnippet, likeSnippet, unlikeSnippet, postComment, deleteComment } from '../controllers/Snippet.controller.js';
 
-//delete a snippet 
-router.delete('/:id', async (req, res) => {
-   try {
-      const snippet = await Snippet.findById(req.params.id);
-      if (snippet.userId === req.body.userId) {
-         await snippet.deleteOne();
-         res.status(200).json({
-            message: 'The snippet has been deleted'
-         });
-      } else {
-         res.status(403).json({
-            message: 'You can delete only your snippet'
-         });
-      }
-   } catch (err) {
-      res.status(500).json(err);
-   }
-});
-
-//get a snippet by id
-router.get('/:id', async (req, res) => {
-   try {
-      const snippet = await Snippet.findById(req.params.id);
-      res.status(200).json(snippet);
-   } catch (err) {
-      res.status(500).json(err);
-   }
-});
-
-//like / dislike a snippet
-router.put('/:id/like', async (req, res) => {
-   try {
-      const snippet = await Snippet.findById(req.params.id);
-      if (!snippet.likes.includes(req.body.userId)) {
-         await snippet.updateOne({ $push: { likes: req.body.userId } });
-         res.status(200).json({
-            message: 'The snippet has been liked'
-         });
-      } else {
-         await snippet.updateOne({ $pull: { likes: req.body.userId } });
-         res.status(200).json({
-            message: 'The snippet has been disliked'
-         });
-      }
-   } catch (err) {
-      res.status(500).json(err);
-   }
-});
-
-
-//comment on a snippet
-router.post('/comment/:id', async (req, res) => {
-   try {
-      const snippet = await Snippet.findById(req.params.id);
-      const newComment = new Comment(req.body);
-      const savedComment = await newComment.save();
-      snippet.comments.push(savedComment);
-      await snippet.save();
-      res.status(200).json(savedComment);
-   } catch (err) {
-      res.status(500).json(err);
-   }
-});
- */
+router.post('/', verifyToken, createSnippet);
+router.put('/:id', verifyToken, updateSnippet);
+router.delete('/:id', verifyToken, deleteSnippet);
+router.get('/:id', getSnippet);
+router.put('/:id/like', verifyToken, likeSnippet);
+router.put('/:id/unlike', verifyToken, unlikeSnippet);
+router.post('/:id/comment', verifyToken, postComment);
+router.delete('/:id/comment/:commentId', verifyToken, deleteComment);
 
 export default router;

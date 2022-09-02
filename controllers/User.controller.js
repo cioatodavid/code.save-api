@@ -14,7 +14,7 @@ export const getUserById = async (req, res, next) => {
 
 //update user
 export const updateUser = async (req, res, next) => {
-   if (req.user.userId === req.params.id) {
+   if (req.user.id === req.params.id) {
       try {
          await User.findByIdAndUpdate(req.params.id, {
             $set: req.body,
@@ -63,7 +63,7 @@ export const followUser = async (req, res, next) => {
    } else {
       next(createError(403, "You can't follow yourself"));
    }
-}
+};
 
 //unfollow a user
 export const unfollowUser = async (req, res, next) => {
@@ -86,7 +86,7 @@ export const unfollowUser = async (req, res, next) => {
    } else {
       next(createError(403, "You can't unfollow yourself"));
    }
-}
+};
 
 //get timeline snippets
 export const getTimelineSnippets = async (req, res, next) => {
