@@ -1,6 +1,8 @@
-const router = require('express').Router();
-const Snippet = require('../models/Snippet.model');
+import express from 'express';
+const router = express.Router();
+import Snippet from '../models/Snippet.model.js';
 
+/* 
 //create a snippet
 router.post('/', async (req, res) => {
    const newSnippet = new Snippet(req.body);
@@ -94,6 +96,6 @@ router.post('/comment/:id', async (req, res) => {
       res.status(500).json(err);
    }
 });
+ */
 
-
-module.exports = router;
+export default router;

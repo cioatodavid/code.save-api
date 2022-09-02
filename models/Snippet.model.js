@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from "mongoose";
 
 const SnippetSchema = new mongoose.Schema(
    {
@@ -18,7 +18,7 @@ const SnippetSchema = new mongoose.Schema(
          type: String,
          required: true
       },
-      tags: { 
+      tags: {
          type: [String],
          required: false
       },
@@ -44,4 +44,4 @@ const SnippetSchema = new mongoose.Schema(
    }, { timestamps: true }
 );
 
-module.exports = mongoose.model('Snippet', SnippetSchema);
+export default mongoose.model('Snippet', SnippetSchema);

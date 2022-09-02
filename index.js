@@ -1,14 +1,15 @@
-const express = require('express')
+import express from 'express'
+import dotenv from 'dotenv'
+import cookieParser from 'cookie-parser'
+import mongoose from 'mongoose'
 const app = express()
-const dotenv = require('dotenv')
-const mongoose = require('mongoose')
-
-const authRoute = require('./routes/auth.route')
-const userRoute = require('./routes/users.route')
-const snippetRoute = require('./routes/snippets.route')
-
 dotenv.config()
-app.use(express.json())
+
+
+import authRoute from './routes/auth.route.js'
+import userRoute from './routes/users.route.js'
+import snippetRoute from './routes/snippets.route.js'
+
 
 const port = process.env.PORT || 5000
 
@@ -22,8 +23,21 @@ mongoose
       console.log(`DB Connection Error: ${err.message}`);
    });
 
+app.use(cookieParser())
+app.use(express.json())
+
 app.use('/api/auth', authRoute)
 app.use('/api/users', userRoute)
 app.use('/api/snippets', snippetRoute)
+
+app.use((err, req, res, next) => {
+   const status = err.status || 500;
+   const message = err.message || 'Something went wrong';
+   return res.status(status).json({
+      sucess: false,
+      status,
+      message
+   });
+});
 
 app.listen(port, () => console.log(`http://localhost:${port}/`))
