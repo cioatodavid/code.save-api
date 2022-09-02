@@ -10,10 +10,6 @@ router.put('/:id', verifyToken, updateSnippet);
 router.delete('/:id', verifyToken, deleteSnippet);
 router.get('/:id', getSnippet);
 router.get('/profile/:id', getUserSnippets);
-router.put('/:id/like', verifyToken, likeSnippet);
-router.put('/:id/unlike', verifyToken, unlikeSnippet);
-router.post('/:id/comment', verifyToken, postComment);
-router.delete('/:id/comment/:commentId', verifyToken, deleteComment);
 
 
 export default router;
