@@ -3,12 +3,16 @@ import Snippet from "../models/Snippet.model.js";
 import Comment from "../models/Comment.model.js";
 
 export const createSnippet = async (req, res, next) => {
-   const newSnippet = new Snippet(req.body);
    try {
-      const savedSnippet = await newSnippet.save();
-      res.status(200).json(savedSnippet);
+      if (req.body.userId === req.user.id) {
+         const newSnippet = new Snippet(req.body);
+         await newSnippet.save();
+         res.status(201).json({ message: "Snippet created successfully" });
+      } else {
+         return next(createError(403, "You are not authorized"));
+      }
    } catch (err) {
-      next(createError(500, err.message));
+      next(err);
    }
 };
 
