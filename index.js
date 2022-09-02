@@ -5,6 +5,7 @@ const mongoose = require('mongoose')
 
 const authRoute = require('./routes/auth.route')
 const userRoute = require('./routes/users.route')
+const snippetRoute = require('./routes/snippets.route')
 
 dotenv.config()
 app.use(express.json())
@@ -21,8 +22,8 @@ mongoose
       console.log(`DB Connection Error: ${err.message}`);
    });
 
-
 app.use('/api/auth', authRoute)
 app.use('/api/users', userRoute)
+app.use('/api/snippets', snippetRoute)
 
 app.listen(port, () => console.log(`http://localhost:${port}/`))

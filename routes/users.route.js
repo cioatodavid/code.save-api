@@ -1,5 +1,7 @@
 const router = require('express').Router();
+const Snippet = require('../models/Snippet.model');
 const User = require('../models/User.model');
+const Comment = require('../models/Comment.model');
 
 //update user
 router.put('/:id', async (req, res) => {
@@ -103,5 +105,37 @@ router.put('/:id/unfollow', async (req, res) => {
       });
    }
 });
+
+//get friends
+router.get('/friends/:userId', async (req, res) => {
+   try {
+      const user = await User.findById(req.params.userId);
+      const friends = await Promise.all(
+         user.followings.map((friendId) => {
+            return User.findById(friendId);
+         })
+      );
+      let friendList = [];
+      friends.map((friend) => {
+         const { _id, name, profilePicture } = friend;
+         friendList.push({ _id, name, profilePicture });
+      });
+      res.status(200).json(friendList);
+   } catch (err) {
+      res.status(500).json(err);
+   }
+});
+
+//get user's all snippets
+router.get('/snippets/:userId', async (req, res) => {
+   try {
+      const snippets = await Snippet.find({ userId: req.params.userId });
+      res.status(200).json(snippets);
+   } catch (err) {
+      res.status(500).json(err);
+   }
+});
+
+
 
 module.exports = router;

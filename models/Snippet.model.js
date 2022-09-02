@@ -26,11 +26,21 @@ const SnippetSchema = new mongoose.Schema(
          type: String,
          required: false
       },
-      user: {
+      userId: {
          type: mongoose.Schema.Types.ObjectId,
          ref: 'User',
          required: true
-      }
+      },
+      likes: {
+         type: [mongoose.Schema.Types.ObjectId],
+         ref: 'User',
+         required: false
+      },
+      comments: {
+         type: [mongoose.Schema.Types.ObjectId],
+         ref: 'Comment',
+         required: false
+      },
    }, { timestamps: true }
 );
 
