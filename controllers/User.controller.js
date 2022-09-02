@@ -104,16 +104,6 @@ export const getTimelineSnippets = async (req, res, next) => {
    }
 };
 
-//get all snippets of a user
-export const getUserSnippets = async (req, res, next) => {
-   try {
-      const user = await User.findById(req.params.id);
-      const snippets = await Post.find({ userId: user._id });
-      res.status(200).json(snippets);
-   } catch (err) {
-      next(err);
-   }
-};
 
 
 

@@ -1,6 +1,7 @@
 import { createError } from "../utils/createError.js";
 import Snippet from "../models/Snippet.model.js";
 import Comment from "../models/Comment.model.js";
+import User from "../models/User.model.js";
 
 export const createSnippet = async (req, res, next) => {
    try {
@@ -90,14 +91,18 @@ export const unlikeSnippet = async (req, res, next) => {
 };
 
 export const postComment = async (req, res, next) => {
-   try {
-      const snippet = await Snippet.findById(req.params.id);
-      const newComment = new Comment(req.body);
-      const savedComment = await newComment.save();
-      await snippet.updateOne({ $push: { comments: savedComment } });
-      res.status(200).json(savedComment);
-   } catch (err) {
-      next(createError(500, err.message));
+   try{
+      if(req.body.userId === req.user.id){
+         const newComment = new Comment(req.body);
+         await newComment.save();
+         const snippet = await Snippet.findById(req.body.snippetId);
+         await snippet.updateOne({ $push: { comments: newComment._id } });
+         res.status(201).json({message: "Comment created successfully", newComment});
+      } else {
+         next(createError(403, "You are not authorized"));
+      }
+   } catch(err){
+      next(err);
    }
 };
 
@@ -115,6 +120,17 @@ export const deleteComment = async (req, res, next) => {
       }
    } catch (err) {
       next(createError(500, err.message));
+   }
+};
+
+//get all snippets of a user
+export const getUserSnippets = async (req, res, next) => {
+   try {
+      const user = await User.findById(req.params.id);
+      const snippets = await Snippet.find({ userId: user._id });
+      res.status(200).json(snippets);
+   } catch (err) {
+      next(err);
    }
 };
 
