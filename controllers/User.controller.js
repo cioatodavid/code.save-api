@@ -1,5 +1,6 @@
 import { createError } from "../utils/createError.js";
 import User from "../models/User.model.js";
+import Snippet from "../models/Snippet.model.js";
 
 //get user by id
 export const getUserById = async (req, res, next) => {
@@ -48,14 +49,12 @@ export const followUser = async (req, res, next) => {
       try {
          const user = await User.findById(req.params.id);
          const currentUser = await User.findById(req.user.id);
-         if (!user.followers.includes(req.body.userId)) {
-            await user.updateOne({ $push: { followers: req.user.id } });
-            await currentUser.updateOne({ $push: { followings: req.params.id } });
-            res.status(200).json({
-               message: "User has been followed",
-            });
+         if (!user.followers.includes(req.user.id)) {
+            await user.updateOne({ $push: { "followers": req.user.id } });
+            await currentUser.updateOne({ $push: { "following": req.params.id } });
+            res.status(200).json("user has been followed");
          } else {
-            next(createError(403, "You already follow this user"));
+            res.status(403).json("you already follow this user");
          }
       } catch (err) {
          next(err);
@@ -73,7 +72,7 @@ export const unfollowUser = async (req, res, next) => {
          const currentUser = await User.findById(req.user.id);
          if (user.followers.includes(req.user.id)) {
             await user.updateOne({ $pull: { followers: req.user.id } });
-            await currentUser.updateOne({ $pull: { followings: req.params.id } });
+            await currentUser.updateOne({ $pull: { following: req.params.id } });
             res.status(200).json({
                message: "User has been unfollowed",
             });
@@ -92,19 +91,14 @@ export const unfollowUser = async (req, res, next) => {
 export const getTimelineSnippets = async (req, res, next) => {
    try {
       const currentUser = await User.findById(req.user.id);
-      const userPosts = await Post.find({ userId: currentUser._id });
-      const friendPosts = await Promise.all(
-         currentUser.followings.map((friendId) => {
-            return Post.find({ userId: friendId });
+      const userSnippets = await Snippet.find({ userId: currentUser._id });
+      const friendSnippets = await Promise.all(
+         currentUser.following.map((friendId) => {
+            return Snippet.find({ userId: friendId });
          })
       );
-      res.status(200).json(userPosts.concat(...friendPosts));
+      res.status(200).json(userSnippets.concat(...friendSnippets));
    } catch (err) {
       next(err);
    }
 };
-
-
-
-
-

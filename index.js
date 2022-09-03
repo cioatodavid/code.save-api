@@ -9,6 +9,7 @@ dotenv.config()
 import authRoute from './routes/auth.route.js'
 import userRoute from './routes/users.route.js'
 import snippetRoute from './routes/snippets.route.js'
+import collectionRoute from './routes/collections.route.js'
 
 
 const port = process.env.PORT || 5000
@@ -28,6 +29,7 @@ app.use(express.json())
 
 app.use('/api/auth', authRoute)
 app.use('/api/users', userRoute)
+app.use('/api/collection', collectionRoute)
 app.use('/api/snippets', snippetRoute)
 
 app.use((err, req, res, next) => {

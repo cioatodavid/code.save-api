@@ -3,7 +3,7 @@ const router = express.Router();
 
 import { verifyToken } from '../utils/verifyToken.js';
 
-import { createSnippet, updateSnippet, deleteSnippet, getSnippet, likeSnippet, unlikeSnippet, postComment, deleteComment, getUserSnippets } from '../controllers/Snippet.controller.js';
+import { createSnippet, updateSnippet, deleteSnippet, getSnippet,  getUserSnippets } from '../controllers/Snippet.controller.js';
 
 router.post('/', verifyToken, createSnippet);
 router.put('/:id', verifyToken, updateSnippet);

@@ -31,14 +31,9 @@ const SnippetSchema = new mongoose.Schema(
          ref: 'User',
          required: true
       },
-      likes: {
-         type: [mongoose.Schema.Types.ObjectId],
-         ref: 'User',
-         required: false
-      },
-      comments: {
-         type: [mongoose.Schema.Types.ObjectId],
-         ref: 'Comment',
+      collectionId: {
+         type: mongoose.Schema.Types.ObjectId,
+         ref: 'Collection',
          required: false
       },
    }, { timestamps: true }

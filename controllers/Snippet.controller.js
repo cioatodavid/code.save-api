@@ -1,16 +1,13 @@
 import { createError } from "../utils/createError.js";
 import Snippet from "../models/Snippet.model.js";
 import User from "../models/User.model.js";
+import Collection from "../models/Collection.model.js";
 
 export const createSnippet = async (req, res, next) => {
    try {
-      if (req.body.userId === req.user.id) {
-         const newSnippet = new Snippet(req.body);
-         await newSnippet.save();
-         res.status(201).json({ message: "Snippet created successfully" });
-      } else {
-         return next(createError(403, "You are not authorized"));
-      }
+      const snippet = new Snippet({...req.body, userId: req.user.id});
+      await snippet.save();
+      res.status(200).json(snippet);
    } catch (err) {
       next(err);
    }
@@ -65,6 +62,28 @@ export const getUserSnippets = async (req, res, next) => {
       res.status(200).json(snippets);
    } catch (err) {
       next(err);
+   }
+};
+
+//add a snippet to a collection
+export const addSnippetToCollection = async (req, res, next) => {
+   try {
+      const snippet = await Snippet.findById(req.params.id);
+      if (snippet.userId === req.user.id) {
+         const collection = await Collection.findById(req.body.collectionId);
+         if (collection.userId === req.user.id) {
+            await collection.updateOne({ $push: { snippets: snippet } });
+            res.status(200).json({
+               message: "The snippet has been added to the collection",
+            });
+         } else {
+            next(createError(403, "You can add only your snippet to your collection"));
+         }
+      } else {
+         next(createError(403, "You can add only your snippet to a collection"));
+      }
+   } catch (err) {
+      next(createError(500, err.message));
    }
 };
 

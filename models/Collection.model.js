@@ -14,7 +14,7 @@ const CollectionSchema = new mongoose.Schema(
       color: {
          type: String,
          required: false,
-         default: "#000000"
+         default: "#ffffff"
       },
       snippets: [
          {

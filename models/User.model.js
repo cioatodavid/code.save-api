@@ -14,28 +14,44 @@ const UserSchema = new mongoose.Schema({
       type: String,
       required: true
    },
-   profilePicture: {
-      type: String,
-      default: ''
-   },
-   coverPicture: {
-      type: String,
-      default: ''
-   },
-   followers: {
-      type: Array,
-      default: []
-   },
-   followings: {
-      type: Array,
-      default: []
-   },
    isAdmin: {
       type: Boolean,
       default: false
    },
-},
-   { timestamps: true }
-);
+   collections: [
+      {
+         type: mongoose.Schema.Types.ObjectId,
+         ref: 'Collection',
+      }
+   ], bio: {
+      type: String,
+      required: false,
+   },
+   location: {
+      type: String,
+      required: false,
+   },
+   website: {
+      type: String,
+      required: false,
+   },
+   profilePicture: {
+      type: String,
+      required: false,
+   },
+   coverPicture: {
+      type: String,
+      required: false,
+   },
+   followers: {
+      type: Array,
+      default: [],
+   },
+   following: {
+      type: Array,
+      default: [],
+   },
+}, { timestamps: true });
+
 
 export default mongoose.model('User', UserSchema);
