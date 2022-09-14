@@ -27,6 +27,9 @@ mongoose
 app.use(cookieParser())
 app.use(express.json())
 
+app.get('/', (req, res) => {
+   res.send('index page')
+})
 app.use('/api/auth', authRoute)
 app.use('/api/users', userRoute)
 app.use('/api/collection', collectionRoute)
