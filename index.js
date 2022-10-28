@@ -2,9 +2,11 @@ import express from 'express'
 import dotenv from 'dotenv'
 import cookieParser from 'cookie-parser'
 import mongoose from 'mongoose'
-const app = express()
-dotenv.config()
+import cors from 'cors'
 
+const app = express()
+
+dotenv.config()
 
 import authRoute from './routes/auth.route.js'
 import userRoute from './routes/users.route.js'
@@ -24,6 +26,8 @@ mongoose
       console.log(`DB Connection Error: ${err.message}`);
    });
 
+
+app.use(cors())
 app.use(cookieParser())
 app.use(express.json())
 

@@ -34,7 +34,7 @@ const SnippetSchema = new mongoose.Schema(
       collectionId: {
          type: mongoose.Schema.Types.ObjectId,
          ref: 'Collection',
-         required: false
+         required: true
       },
    }, { timestamps: true }
 );

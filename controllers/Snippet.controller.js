@@ -7,6 +7,7 @@ export const createSnippet = async (req, res, next) => {
    try {
       const snippet = new Snippet({...req.body, userId: req.user.id});
       await snippet.save();
+      await Collection.findByIdAndUpdate(req.body.collectionId, {$push: {snippets: snippet._id}});
       res.status(200).json(snippet);
    } catch (err) {
       next(err);

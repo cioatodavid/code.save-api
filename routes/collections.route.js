@@ -10,6 +10,6 @@ router.get("/:id", verifyToken, getCollection);
 router.put("/:id", verifyToken, updateCollection);
 router.delete("/:id", verifyToken, deleteCollection);
 router.get("/user/:id", verifyToken, getUserCollections);
-router.get("/snippets/:id", verifyToken, getCollectionSnippets);
+router.get("/snippets/:id", getCollectionSnippets);
 
 export default router;
